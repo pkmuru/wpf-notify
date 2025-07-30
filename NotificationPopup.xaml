@@ -1,0 +1,176 @@
+<Window x:Class="NotificationApp.NotificationPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NotificationPopup" 
+        Width="350" 
+        Height="140"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        Topmost="True"
+        ResizeMode="NoResize">
+    
+    <Window.Resources>
+        <Storyboard x:Key="SlideInAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="(Window.Left)" 
+                           From="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ActualWidth}" 
+                           To="{Binding SlideInPosition}" 
+                           Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                           From="0" 
+                           To="1" 
+                           Duration="0:0:0.3"/>
+        </Storyboard>
+        
+        <Storyboard x:Key="SlideOutAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="(Window.Left)" 
+                           To="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ActualWidth}" 
+                           Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                           To="0" 
+                           Duration="0:0:0.3"/>
+        </Storyboard>
+    </Window.Resources>
+    
+    <Border Background="White" 
+            BorderBrush="#E5E5E5" 
+            BorderThickness="1" 
+            CornerRadius="0"
+            Effect="{DynamicResource NotificationShadow}">
+        
+        <Border.Resources>
+            <DropShadowEffect x:Key="NotificationShadow" 
+                            Color="Black" 
+                            Direction="270" 
+                            ShadowDepth="3" 
+                            Opacity="0.3" 
+                            BlurRadius="8"/>
+        </Border.Resources>
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="4"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Main Content -->
+            <Grid Grid.Row="0" Margin="12,8,8,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Image Area -->
+                <Border Grid.Column="0" 
+                      x:Name="ImageContainer"
+                      Width="64" 
+                      Height="64" 
+                      Margin="0,0,12,0"
+                      VerticalAlignment="Top"
+                      Visibility="Collapsed">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#4A90E2" Offset="0"/>
+                            <GradientStop Color="#357ABD" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Image x:Name="NotificationImage" 
+                         Stretch="UniformToFill"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Center"/>
+                </Border>
+                
+                <!-- Content Area -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <!-- App Name -->
+                    <TextBlock x:Name="AppNameText" 
+                             Text="Telerik UI for WPF" 
+                             FontSize="11" 
+                             Foreground="#666666" 
+                             FontWeight="Normal"
+                             Margin="0,0,0,2"/>
+                    
+                    <!-- Title -->
+                    <TextBlock x:Name="TitleText" 
+                             Text="Progress Telerik UI for WPF" 
+                             FontSize="13" 
+                             Foreground="#000000" 
+                             FontWeight="SemiBold"
+                             TextWrapping="Wrap"
+                             Margin="0,0,0,4"/>
+                    
+                    <!-- Message -->
+                    <TextBlock x:Name="MessageText" 
+                             Text="Notify icon is a component that displays an icon in the Windows tray area." 
+                             FontSize="11" 
+                             Foreground="#333333" 
+                             TextWrapping="Wrap"
+                             LineHeight="14"/>
+                    
+                    <!-- Action Link -->
+                    <TextBlock x:Name="ActionText" 
+                             Text="Click here to open Telerik WPF Documentation" 
+                             FontSize="11" 
+                             Foreground="#0078D4" 
+                             TextDecorations="Underline"
+                             Cursor="Hand"
+                             Margin="0,4,0,0"
+                             MouseLeftButtonUp="ActionText_Click"/>
+                </StackPanel>
+                
+                <!-- Close Button -->
+                <Button Grid.Column="2" 
+                      x:Name="CloseButton"
+                      Width="24" 
+                      Height="24" 
+                      VerticalAlignment="Top"
+                      HorizontalAlignment="Right"
+                      Background="Transparent" 
+                      BorderThickness="0"
+                      Cursor="Hand"
+                      Click="CloseButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" 
+                                  CornerRadius="2">
+                                <Path Data="M 8,8 L 12,12 M 12,8 L 8,12" 
+                                    Stroke="#666666" 
+                                    StrokeThickness="1.5" 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#F0F0F0"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+            
+            <!-- Progress Bar -->
+            <Border Grid.Row="1" 
+                  Background="#0078D4" 
+                  CornerRadius="0,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="#0078D4" 
+                                    Direction="90" 
+                                    ShadowDepth="0" 
+                                    Opacity="0.3" 
+                                    BlurRadius="2"/>
+                </Border.Effect>
+            </Border>
+        </Grid>
+    </Border>
+</Window>
